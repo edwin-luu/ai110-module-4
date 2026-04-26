@@ -1,98 +1,130 @@
-# Model Card: Music Recommender Simulation
+# Model Card: VibeFinder AI
 
 ## 1. Model Name
 
-**VibeFinder 1.0** — A tier-weighted content-based music recommender.
+**VibeFinder AI** — A RAG-based music recommender combining tier-weighted content similarity with LLM-powered natural language I/O.
+
+**Evolution from base project:** VibeFinder 1.0 (Module 3) was a pure algorithmic recommender with hardcoded dict profiles and no LLM. VibeFinder AI adds a natural language frontend: a Claude LLM parses the user's free text into structured preferences, the original scoring engine retrieves matches from a 210-song catalog, and a second LLM call generates a conversational response. The core scoring logic is unchanged.
 
 ---
 
 ## 2. Intended Use
 
-This system suggests the top 3–5 songs from a small catalog based on a user's preferred genre, mood, energy level, and optional audio features. It is designed for classroom exploration in CodePath AI110, not for real users or production deployment. It assumes the user can articulate their taste as a set of feature preferences.
+This system allows users to describe what music they want in plain English and receive ranked recommendations with natural language explanations. It is designed for classroom exploration in CodePath AI110, not for real users or production deployment.
 
-**Non-intended use**: This system should not be used for real music streaming, commercial recommendation, or any context where users expect accurate, diverse suggestions. It has no feedback loop, no collaborative data, and an 18-song catalog — it cannot handle real-world musical diversity. Using it as a real product would create filter bubbles and exclude listeners of underrepresented genres.
+**Non-intended use:** This system should not be used for real music streaming, commercial recommendation, or any context where users expect broad, current, or personalized suggestions. It has a fixed 210-song catalog, no user feedback loop, and no collaborative data. Using it as a real product would create filter bubbles and exclude listeners of underrepresented genres.
 
 ---
 
 ## 3. How the Model Works
 
-The system compares every song in the catalog to a user's taste profile. Each song feature (genre, mood, energy, etc.) is checked for similarity: categorical features like genre are either a match or not, while numeric features like energy get a percentage score based on how close the values are.
+### RAG Pipeline
 
-Not all features are treated equally. The system uses a three-tier weighting system:
-- **Tier 1** (genre, mood, energy) — the "vibe" features — get the highest weight because they define how music *feels*.
-- **Tier 2** (acousticness, valence) — supporting features that add nuance.
-- **Tier 3** (danceability, tempo) — tiebreakers that rarely change the ranking on their own.
+User free text flows through three stages:
 
-Each song gets a final score between 0 and 1. The songs are sorted highest to lowest, and the top results are returned with a plain-English explanation of why they were chosen.
+1. **Parse** — Claude (via AWS Bedrock) reads the user's message and outputs a structured JSON object with music preferences (`genre`, `mood`, `energy`, etc.) and an optional song count (`k`). The output is validated and sanitized before use.
+2. **Retrieve** — The tier-weighted scoring engine scores all 210 songs against the parsed preferences and returns the top-k results. No LLM is involved here.
+3. **Generate** — Claude receives the user's original request plus the ranked songs and writes a numbered, conversational response explaining why each song fits.
+
+### Scoring Formula
+
+```
+score = sum(weight[f] * similarity(user[f], song[f])) / sum(weight[f])
+```
+
+Only features the user specified contribute to the score. Feature tiers and weights:
+
+| Tier | Features | Weights |
+|---|---|---|
+| 1 (vibe) | genre (3.0), mood (3.0), energy (2.5) | Highest |
+| 2 (support) | acousticness (1.5), valence (1.5) | Medium |
+| 3 (tiebreaker) | danceability (0.75), tempo_bpm (0.5) | Lowest |
+
+Categorical features (genre, mood) are binary: 1.0 for a match, 0.0 otherwise. Numeric features use `1 - abs(user - song)`. Tempo is normalized to [0, 1] before comparison.
+
+### Multi-Tag Genre System
+
+Every song has 3 pipe-separated genre tags (e.g., `bachata|latin pop|spanish`). A song scores 1.0 on genre if *any* of its tags matches the user's requested genre(s). For multi-genre queries (e.g., "reggaeton and bachata"), the LLM returns a list and the scorer uses `any()` matching — a pure bachata song gets full credit in a reggaeton+bachata search.
 
 ---
 
 ## 4. Data
 
-- **18 songs** in `data/songs.csv` (10 original + 8 added for genre diversity)
-- **15 genres**: pop, lofi, rock, ambient, jazz, synthwave, indie pop, country, electronic, r&b, metal, bossa nova, chiptune, folk, house
-- **12 moods**: happy, chill, intense, relaxed, focused, moody, nostalgic, energetic, romantic, aggressive, playful, melancholy
-- The original 10 songs skewed toward pop and lofi. The 8 added songs were chosen specifically to fill genre/mood gaps.
-- Missing from the catalog: classical, hip-hop, latin, k-pop, reggae, blues — entire listener communities are unrepresented.
-- The dataset reflects one person's idea of genre diversity, not a systematic survey of global music consumption.
+- **210 songs** in `data/songs.csv`
+- **47 genres**, **42 moods**, 7 audio features per song
+- Genre tags follow a 3-layer structure: specific genre → genre family → cultural/language tag (e.g., `bachata|latin pop|spanish`, `j-pop|pop|japanese`)
+- Non-English songs include cultural tags (`spanish`, `french`, `japanese`, `mandarin`, `cantonese`, `korean`, `latin`) for natural language discoverability
+- The catalog was manually assembled — it reflects one person's idea of genre diversity, not a systematic survey of global music consumption
+- Missing or underrepresented: classical, blues, gospel, afrobeats, and many regional genres
 
 ---
 
 ## 5. Strengths
 
-- **Clear differentiation**: A pop/happy user and a lofi/chill user get completely different top-5 lists. The tier weighting ensures that "vibe" features dominate, which aligns with how most people describe what they want to listen to.
-- **Graceful degradation with partial input**: If a user only specifies genre, the system scores only on genre. If they add energy and valence, those features join the score. The system never crashes on incomplete input.
-- **Transparency**: Every recommendation comes with an explanation ("genre match; energy similarity 98%"), making it easy to understand *why* a song was picked and to spot when the logic is doing something unexpected.
-- **Intuitive results for well-represented profiles**: Users whose taste matches a genre/mood combination with multiple songs in the catalog (e.g., lofi/chill has 3 songs) get nuanced rankings where energy and acousticness break ties meaningfully.
+- **Natural language input.** Users describe what they want conversationally ("something chill to code to late at night") and get structured, relevant results — no form-filling required.
+- **Transparent retrieval.** Every recommendation comes with a score and an explanation ("genre match; energy similarity 98%"), making it easy to understand why a song was picked.
+- **Multi-genre discoverability.** The 3-tag system and multi-genre query support allow cross-genre searches that a single-tag system would miss entirely.
+- **Graceful partial input.** If the user specifies only genre, only genre contributes to the score. The system never crashes on incomplete preferences.
+- **No hallucinated metadata.** All song details in the generation prompt come directly from the catalog, not from the LLM's training data, preventing fabricated artist or genre descriptions.
 
 ---
 
 ## 6. Limitations and Bias
 
-- **Genre dominance bias**: Genre weight (3.0) is so high that a genre mismatch is nearly impossible to overcome. A pop song with perfect energy, mood, and valence similarity to a rock listener will still rank low. This means the system effectively filters by genre first and only uses other features as tiebreakers within the same genre.
-- **Categorical rigidity**: "Indie pop" and "pop" get 0% similarity. "Rock" and "metal" are treated as unrelated. Real genre relationships are gradients, not binary.
-- **Conflicting preferences are mishandled**: A user who asks for "lofi + energy 0.95" gets low-energy lofi songs because genre+mood loyalty (weight 6.0) overwhelms the energy signal (weight 2.5). The system doesn't warn the user that their preferences are contradictory.
-- **Underrepresented genres get bad recommendations**: A classical music listener gets bossa nova as the "best" match (score 0.64) — the system doesn't flag that no good match exists, it just returns the least-bad option with a confident-looking score.
-- **No diversity mechanism**: If 5 songs share the top genre+mood, all 5 will be recommended. There's no "also try something different" logic.
-- **Small catalog ceiling**: With only 1 song per genre for most genres, the system can't differentiate between users who like the same genre but different sub-styles.
+- **Genre dominance bias.** Genre weight (3.0) is so high that a genre mismatch is nearly impossible to overcome. The system effectively filters by genre first and uses other features only as tiebreakers within the same genre.
+- **Categorical rigidity.** "Indie pop" and "pop" get 0% similarity. "Rock" and "metal" are treated as unrelated. Real genre relationships are gradients, not binary.
+- **No balanced multi-genre splits.** Asking for "5 Spanish and 5 Chinese songs" returns the top 10 across both genres — secondary features determine ranking, which can produce an uneven split (e.g., 6/4). There is no logic to enforce proportional representation.
+- **No conversation memory.** Each request is fully independent. The system cannot reference prior turns or build on user feedback within a session.
+- **Fixed local catalog.** Recommendations are limited to 210 songs. The system cannot discover new music or follow trends.
+- **LLM confidence bias.** Even when the top match score is below 0.5, Claude generates an enthusiastic-sounding response. The low-confidence guardrail adds a disclaimer but does not suppress the positive framing.
+- **Conflicting preferences are mishandled.** A user who asks for "lofi + very high energy" gets low-energy lofi songs because genre+mood loyalty (weight 6.0) overwhelms the energy signal (weight 2.5). The system does not warn the user that their preferences are contradictory.
 
 ---
 
 ## 7. Evaluation
 
-**Profiles tested**:
-- High-Energy Pop, Chill Lofi, Deep Intense Rock (core profiles)
-- Conflicting: lofi + energy 0.95 (adversarial)
-- Missing Genre: classical (out-of-distribution)
-- Numeric Only: no genre/mood (boundary test)
+**Query types tested:**
 
-**What I looked for**: Whether the #1 pick matched intuition, whether edge cases produced surprising or misleading results, and whether different users actually got different recommendations.
+| Query type | Example | Result |
+|---|---|---|
+| Genre + mood | "chill music to code to" | Top results matched genre and mood; scores 0.85+ |
+| Multi-genre | "reggaeton and bachata songs" | Songs from both genres surfaced correctly |
+| Cultural/language | "10 Chinese songs" | Mandopop and Cantopop songs returned via cultural tags |
+| Mixed language | "5 Spanish and 5 Chinese" | Correct genres returned but split was 6/4, not 5/5 |
+| Low-confidence | "something classical" | No classical in catalog; disclaimer triggered at score < 0.5 |
+| Count extraction | "give me 15 songs" | Correct k=15 parsed and passed to recommender |
 
-**Findings**:
-- Core profiles produced intuitive results — the right genre's best song always ranked first with scores above 0.98.
-- The "Conflicting" profile revealed genre dominance: lofi songs ranked top despite terrible energy matches.
-- The "Missing Genre" profile showed that mood becomes the primary signal when genre can't match — Bossa Nova Sunset won via "relaxed" mood match, which actually feels reasonable.
-- The "Numeric Only" profile produced the most surprising result: a country song won because its audio features happened to be numerically close. This showed that without categorical anchors, the system becomes a pure number matcher with no "taste" awareness.
+**Findings:**
+- The LLM reliably extracts genre and mood from natural language, including informal descriptions like "vibing late at night."
+- Multi-genre queries correctly surface songs from both requested genre pools.
+- Cultural tags (`spanish`, `japanese`, `mandarin`) make non-English catalogs fully discoverable — before adding these, "Spanish songs" returned empty results.
+- The scorer produces meaningfully different rankings for "reggaeton" vs. "reggaeton and bachata" — adding the second genre changes relative ranking, not just the pool.
 
-**Weight experiment**: Halving genre (3.0 → 1.5) and doubling energy (2.5 → 5.0) caused cross-genre recommendations to appear — Gym Hero (pop) jumped into the top 3 for a rock listener. The change made results feel less genre-loyal but more physically accurate.
+**What the LLM struggled with:**
+- Occasionally wraps JSON in markdown fences despite the system prompt forbidding it — handled defensively by stripping them.
+- Vague requests like "just play something" return empty prefs, triggering the rephrase guardrail.
 
-**Automated tests**: 45 pytest cases covering scoring math, tier weight ordering, tempo normalization, edge cases (empty prefs, single-song catalog), and explanation generation.
+**Automated tests:** 74 pytest cases — 45 for the scoring engine (math, tier weights, tempo normalization, multi-tag matching, edge cases) and 29 for the LLM layer (all mocked, no live Bedrock calls).
 
 ---
 
 ## 8. Future Work
 
-- **Genre embeddings or hierarchy**: Instead of binary match/mismatch, use a similarity matrix (e.g., rock/metal = 0.7, pop/indie pop = 0.8) so related genres partially match.
-- **Conflict detection**: Warn users when their preferences are contradictory (e.g., "lofi songs rarely have energy above 0.7").
-- **Diversity injection**: After picking the top match, intentionally include 1–2 songs from different genres or moods to break the filter bubble.
-- **Confidence scoring**: Flag when the best match has a low absolute score, so the user knows the system is guessing rather than confident.
-- **Larger dataset**: Scale to 100+ songs so each genre has enough variety to produce meaningful within-genre rankings.
-- **Multi-user profiles**: Support "group vibe" recommendations where the system balances preferences across multiple listeners.
+- **Genre embeddings or hierarchy.** Instead of binary match/mismatch, use a similarity matrix (e.g., rock/metal = 0.7, pop/indie pop = 0.8) so related genres partially match.
+- **Balanced multi-genre retrieval.** Run separate `recommend_songs()` calls per genre when the user specifies a split (e.g., "5 Spanish and 5 Chinese"), then merge.
+- **Conversation memory.** Store prior turns so the user can follow up with "give me more like #3" or "now make them slower."
+- **Conflict detection.** Warn users when their preferences are contradictory (e.g., "lofi songs rarely exceed energy 0.7").
+- **Larger and curated catalog.** Scale to 1,000+ songs with systematic genre coverage, not manual assembly.
+- **Diversity injection.** After picking the top matches, intentionally include 1–2 songs from different genres or moods to reduce filter-bubble behavior.
 
 ---
 
 ## 9. Personal Reflection
 
-The most surprising thing was how much the *weights* matter compared to the *features*. Adding danceability and tempo barely changed any ranking because their low weights made them irrelevant. But shifting genre weight by 50% completely reshuffled the results. This made me realize that in real recommender systems, the tuning decisions (what to weigh, how much) are where human bias enters the system — and those decisions are usually invisible to the end user.
+**Base project takeaway (VibeFinder 1.0):**
+The most surprising thing was how much the *weights* matter compared to the *features*. Adding danceability and tempo barely changed any ranking because their low weights made them nearly irrelevant. But shifting genre weight by 50% completely reshuffled results. In real recommender systems, the weight tuning decisions are where human bias enters the system — and those decisions are usually invisible to users.
 
-Building the edge case profiles changed how I think about Spotify's recommendations. When Spotify recommends a song I've never heard in a genre I don't usually listen to, that's a deliberate design choice to break the filter bubble — something my system can't do at all. And when Spotify keeps recommending the same handful of artists, that's probably the genre-dominance bias I observed here, scaled up to millions of songs. The difference between "the algorithm understands me" and "the algorithm is stuck in a loop" is just a matter of weight tuning.
+**Final project takeaway (VibeFinder AI):**
+Adding the LLM layer changed what failures look like. The base project failed silently — bad results just had lower scores. The AI version fails conversationally — a poor catalog match still gets a confident, articulate response. The low-confidence guardrail helps, but it exposed a fundamental tension: users expect a natural language system to "understand" them, not just retrieve the least-bad option. Managing that expectation gap is harder than fixing the retrieval logic.
+
+The multi-tag genre system also produced a non-obvious emergent behavior: songs with broad tag overlap suddenly appeared in searches they hadn't before. The three-tag cap kept this in check, but it showed that catalog design decisions (how many tags per song, what tags to use) have as much impact on recommendation quality as the scoring algorithm itself.

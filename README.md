@@ -77,23 +77,19 @@ You: I want something chill to code to late at night.
 
 VibeFinder: Of course! Here are some perfect late-night coding tracks:
 
-1. "Midnight Coding" by LoRoom — A lofi chill track with exactly the low energy and
-   high acousticness you'd want for a focused, quiet session.
-2. "Focus Flow" by LoRoom — Another lofi gem tuned for concentration, with a calm
-   focused mood and minimal distraction.
+1. "Focus Flow" by LoRoom — A lofi hip-hop and ambient blend with a focused mood and perfectly matched tempo, making it ideal for staying locked in during a late-night session.
+2. "Midnight Coding" by LoRoom — The title says it all; this chill lofi indie track has high acousticness and a near-perfect tempo match, creating a relaxed atmosphere great for late-night work.
 ...
 ```
 
 **2 — Multi-genre request with count:**
 ```
-You: Give me a list of 12 reggaeton and bachata songs.
+You: Give me a list of 12 reggaeton and/or bachata songs.
 
 VibeFinder: Sure! Here are 12 great reggaeton and bachata tracks:
 
-1. "Dile al Amor" by Aventura — A deeply romantic bachata gem with the classic
-   soulful guitar-driven sound Aventura is known for.
-2. "Si No Le Contesto" by Plan B — A classic romantic reggaeton track with smooth,
-   laid-back vibes perfect for a passionate mood.
+1. "LA CAPI" by Myke Towers — A confident Latin trap-infused reggaeton banger with a swagger-driven energy that's perfect for hyping yourself up.
+2. "Si No Le Contesto" by Plan B — A smooth, romantic reggaeton track with a laid-back groove that captures the push-and-pull tension of a love dynamic.
 ...
 ```
 
@@ -103,10 +99,8 @@ You: I want 10 Chinese songs.
 
 VibeFinder: Sure! Here are 10 Chinese songs you might enjoy:
 
-1. "青花瓷" by Jay Chou — A beautifully calm Mandopop classic with folk influences,
-   painting vivid imagery of ancient Chinese culture through its poetic lyrics.
-2. "月亮代表我的心" by Teresa Teng — A timeless romantic classic that remains one
-   of the most beloved Mandopop songs of all time.
+1. **"一路生花" by 温奕心** — A soaring Mandopop track with an inspiring mood, perfect for lifting your spirits and keeping you motivated.
+2. **"半點心" by Grasshopper** — A classic Cantopop gem with a nostalgic feel, transporting you back to the golden era of Hong Kong pop music.
 ...
 ```
 
@@ -114,14 +108,35 @@ VibeFinder: Sure! Here are 10 Chinese songs you might enjoy:
 
 ## Getting Started
 
-### Prerequisites
+### 1. AWS Account and Bedrock Setup
 
-- Python 3.12+
-- AWS account with Bedrock access enabled in `us-east-1`
-- IAM user or role with `AmazonBedrockFullAccess`
-- AWS credentials configured locally (`aws configure`)
+1. Create or log in to an [AWS account](https://aws.amazon.com).
 
-### Setup
+2. In the AWS Console, navigate to **Amazon Bedrock** (region: **us-east-1**):
+   - Go to **Model access** → request access to **Claude Sonnet** by Anthropic. Wait for status to show "Access granted."
+   - Go to **Model Catalog** → click **Claude Sonnet 4.6** → copy the **Model ID** and prepend `us.` to it (e.g., `us.anthropic.claude-sonnet-4-6`).
+
+3. In **IAM** → **IAM Users** → **Create user**:
+   - Enter any **User name**.
+   - Under **Set permissions**, click **Attach policies directly** and select **AmazonBedrockFullAccess**.
+   - Click **Create User**.
+
+4. Under the new user's **Security credentials** tab → **Create access key** (use case: Local code) → copy the **Access Key ID** and **Secret Access Key**.
+
+5. Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), then configure it:
+
+   ```bash
+   aws configure
+   # Prompts: Access Key ID, Secret Access Key, region (us-east-1), output format (json)
+   ```
+
+6. Verify access:
+
+   ```bash
+   aws sts get-caller-identity
+   ```
+
+### 2. Python Environment
 
 1. Create and activate a virtual environment:
 
@@ -137,11 +152,7 @@ VibeFinder: Sure! Here are 10 Chinese songs you might enjoy:
    pip install -r requirements.txt
    ```
 
-3. Verify your AWS credentials work:
-
-   ```bash
-   aws sts get-caller-identity
-   ```
+   > **Note (Windows):** `botocore[crt]` is required for the AWS credential provider chain and is already listed in `requirements.txt`.
 
 ### Running the App
 
@@ -194,20 +205,20 @@ logs/
 Asking Claude to recommend songs directly would require embedding the full catalog in every prompt (expensive and brittle). Instead, the catalog is queried algorithmically and only the relevant results are passed to the LLM for narration. The LLM never has to "know" all 210 songs — it just explains the ones the retriever found.
 
 **Why AWS Bedrock instead of the Anthropic API?**
-The project uses $100 in AWS Bedrock credits rather than separate Anthropic API credits. Bedrock provides the same Claude models via `boto3` — the only code difference is the client and request format.
+The project uses AWS credits rather than separate Anthropic API credits. Bedrock provides the same Claude models via `boto3` — the only code difference is the client and request format.
 
 **Why pipe-separated genre tags instead of a separate tags column?**
 Keeping a single `genre` column that supports both `"pop"` and `"pop|indie pop|electronic"` preserves backward compatibility with `load_songs()` and the scoring engine. The split happens at load time, and `score_song()` uses a defensive `isinstance` check so both formats always work.
 
 **Why "any match = 1.0" for multi-genre scoring?**
-When a user asks for "reggaeton and bachata", they want songs from *either* genre — not songs that are literally both. Partial credit would penalize a great pure-bachata song just because it isn't also reggaeton. Full credit for any matching tag produces the most intuitive mixed results.
+When a user asks for "reggaeton and/or bachata", they want songs from *either* genre — not songs that are literally both. Partial credit would penalize a great pure-bachata song just because it isn't also reggaeton. Full credit for any matching tag produces the most intuitive mixed results.
 
 **Why keep the base scoring engine unchanged?**
 The tier-weighted scoring already handles the recommendation quality problem well. Adding LLM layers on top (rather than replacing the scorer) lets the system benefit from both: fast, explainable algorithmic ranking plus natural language I/O.
 
 ---
 
-## Testing Summary
+## Testing Summary         
 
 | Test suite | Count | Coverage |
 |---|---|---|
@@ -223,6 +234,30 @@ The tier-weighted scoring already handles the recommendation quality problem wel
 
 ---
 
+## Issues Fixed
+
+1. **Single genre tag per song.** Songs were tagged with one genre string, which made many queries return no results. "La Bachata" by Manuel Turizo was tagged only as `latin pop`, so a search for "bachata" returned nothing. Replaced with a 3-tag pipe-separated system (`specific genre | genre family | cultural tag`) so songs surface from multiple query angles.
+
+2. **Missing cultural/language tags.** Searching "Spanish songs" or "Chinese music" returned empty results because the LLM correctly identified the intent but the validator dropped the value as an unknown genre. Added `spanish`, `french`, `japanese`, `mandarin`, `cantonese`, and `korean` as recognized genre values in both the song catalog and the validation layer.
+
+3. **Response truncation for large song lists.** With `max_tokens=300`, responses for 10–15 song requests were cut off mid-sentence. Fixed by scaling `max_tokens` dynamically: `max(400, len(results) * 80 + 100)`.
+
+---
+
+## Limitations
+
+1. **No balanced multi-genre splits.** When a user asks for "5 Spanish and 5 Chinese songs," the system treats it as a single multi-genre query and returns the top 10 overall matches. Since all matching songs tie on genre score (1.0), secondary features break the tie — which can produce an uneven split (e.g., 6 Spanish / 4 Chinese). Enforcing a proportional split would require running separate retrieval queries per genre.
+
+2. **No conversation memory.** Each request is fully independent. The system cannot build on prior turns ("give me more like #3" or "make them slower") because there is no session state between queries.
+
+3. **Fixed local catalog.** Recommendations are limited to the 210 songs in `songs.csv`. The system cannot discover new music, follow trends, or expand its catalog without a manual CSV edit.
+
+4. **Binary genre and mood matching.** Genre and mood similarity are all-or-nothing (1.0 or 0.0). "Indie pop" and "pop" score zero similarity to each other — there is no concept of genre proximity or partial credit for related styles.
+
+5. **LLM narration is confidently positive.** Even when the top match score is below 0.5, the generated response sounds enthusiastic. The low-confidence guardrail adds a soft disclaimer but does not suppress the positive framing.
+
+---
+
 ## Video Walkthrough
 
 *[Loom link — to be added before submission]*
@@ -230,9 +265,6 @@ The tier-weighted scoring already handles the recommendation quality problem wel
 ---
 
 ## Reflection and Ethics
-
-**Limitations and biases:**
-The tier-weighted scoring still carries all the biases from the base project — genre dominance, categorical rigidity (no partial genre credit), and filter-bubble behavior. The LLM layer adds a new bias: Claude will generate enthusiastic-sounding responses even when the catalog match is poor (score < 0.5). The low-confidence guardrail partially addresses this, but a 0.4-score recommendation still gets presented positively.
 
 **Could this be misused?**
 The system recommends from a fixed local catalog — it cannot access external music or user data, so the misuse surface is low. The main risk is the LLM generating hallucinated song details (wrong artist, wrong genre description) if the context passed to it is ambiguous. Mitigation: all song metadata in the generation prompt comes directly from the catalog, not from the LLM's training data.
