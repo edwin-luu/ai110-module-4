@@ -1,19 +1,211 @@
 id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
-11,Desert Highway,Cactus Wire,country,nostalgic,0.55,96,0.63,0.52,0.74
-12,Bass Cathedral,DJ Pryzm,electronic,energetic,0.95,140,0.70,0.91,0.03
-13,Velvet Curtain,Lila Moon,r&b,romantic,0.48,88,0.75,0.68,0.45
-14,Iron Anthem,Shred Protocol,metal,aggressive,0.97,168,0.32,0.44,0.08
-15,Bossa Nova Sunset,Rio Keys,bossa nova,relaxed,0.33,105,0.78,0.61,0.83
-16,Pixel Dreams,Chiptune Kid,chiptune,playful,0.72,145,0.80,0.85,0.02
-17,Rainy Balcony,Hana Mist,folk,melancholy,0.30,68,0.40,0.38,0.91
-18,Club Mirage,Neon Echo,house,energetic,0.88,128,0.72,0.90,0.07
+1,Sunrise City,Neon Echo,pop|indie pop|electronic,happy,0.82,118,0.84,0.79,0.18
+2,Midnight Coding,LoRoom,lofi|hip-hop|indie,chill,0.42,78,0.56,0.62,0.71
+3,Storm Runner,Voltline,rock|alt rock|indie rock,intense,0.91,152,0.48,0.66,0.10
+4,Library Rain,Paper Lanterns,lofi|ambient|folk,chill,0.35,72,0.60,0.58,0.86
+5,Gym Hero,Max Pulse,pop|electronic|edm,intense,0.93,132,0.77,0.88,0.05
+6,Spacewalk Thoughts,Orbit Bloom,ambient|electronic|indie,chill,0.28,60,0.65,0.41,0.92
+7,Coffee Shop Stories,Slow Stereo,jazz|soul|folk,relaxed,0.37,90,0.71,0.54,0.89
+8,Night Drive Loop,Neon Echo,synthwave|electronic|indie pop,moody,0.75,110,0.49,0.73,0.22
+9,Focus Flow,LoRoom,lofi|hip-hop|ambient,focused,0.40,80,0.59,0.60,0.78
+10,Rooftop Lights,Indigo Parade,indie pop|pop|indie,happy,0.76,124,0.81,0.82,0.35
+11,Desert Highway,Cactus Wire,country|folk|soft rock,nostalgic,0.55,96,0.63,0.52,0.74
+12,Bass Cathedral,DJ Pryzm,electronic|edm|house,energetic,0.95,140,0.70,0.91,0.03
+13,Velvet Curtain,Lila Moon,r&b|soul|pop,romantic,0.48,88,0.75,0.68,0.45
+14,Iron Anthem,Shred Protocol,metal|rock|punk,aggressive,0.97,168,0.32,0.44,0.08
+15,Bossa Nova Sunset,Rio Keys,bossa nova|jazz|latin,relaxed,0.33,105,0.78,0.61,0.83
+16,Pixel Dreams,Chiptune Kid,chiptune|electronic|indie pop,playful,0.72,145,0.80,0.85,0.02
+17,Rainy Balcony,Hana Mist,folk|indie|alt pop,melancholy,0.30,68,0.40,0.38,0.91
+18,Club Mirage,Neon Echo,house|electronic|edm,energetic,0.88,128,0.72,0.90,0.07
+19,Sold Out Dates (feat. Lil Baby),Gunna; Lil Baby,hip-hop|rap|trap,confident,0.78,120,0.65,0.82,0.12
+20,Goodness Gracious,BABY GRAVY; Yung Gravy; bbno$,rap|pop rap|hip-hop,playful,0.74,118,0.72,0.86,0.10
+21,Lalala,Y2K; bbno$,pop rap|rap|hip-hop,quirky,0.70,130,0.75,0.88,0.08
+22,Alors On Danse,Stromae; Kanye West,electronic|hip-hop|french,moody,0.68,120,0.45,0.80,0.15
+23,antidepressants,bbno$,rap|pop rap|hip-hop,playful,0.72,122,0.70,0.85,0.10
+24,C'est La Vie,Yung Gravy; bbno$; Rich Brian,rap|pop rap|hip-hop,lighthearted,0.73,119,0.76,0.84,0.11
+25,Stay,The Hails,indie|indie pop|soft rock,chill,0.55,100,0.60,0.68,0.35
+26,Come a Little Closer,Cage The Elephant,indie rock|rock|indie,groovy,0.80,135,0.70,0.74,0.20
+27,Kilby Girl,The Backseat Lovers,indie|indie rock|folk,nostalgic,0.65,115,0.68,0.70,0.30
+28,Apollo!,EGOVERT,rap|hip-hop|trap,energetic,0.85,140,0.60,0.78,0.10
+29,LA CAPI,Myke Towers,latin trap|reggaeton|spanish,confident,0.82,95,0.72,0.88,0.09
+30,NOW OR NEVER,Tkandz; CXSPER,phonk|trap|hip-hop,dark,0.88,150,0.40,0.75,0.05
+31,This Love,Maroon 5,pop|soft rock|indie pop,romantic,0.70,95,0.80,0.75,0.20
+32,Basket Case,Green Day,punk|rock|alt rock,angsty,0.92,176,0.65,0.70,0.05
+33,Bunny Girl,1nonly; Ciscaux,rap|hip-hop|trap,dark,0.80,140,0.45,0.78,0.08
+34,Costa Rica Remix,Bankrol Hayden; The Kid LAROI,rap|hip-hop|pop rap,chill,0.68,120,0.70,0.82,0.12
+35,Suge,DaBaby,rap|hip-hop|trap,confident,0.86,150,0.60,0.84,0.07
+36,Lemonade,Internet Money; Gunna; Don Toliver; NAV,hip-hop|rap|trap,chill,0.65,140,0.72,0.83,0.10
+37,Martin & Gina,Polo G,rap|hip-hop|rnb,reflective,0.60,110,0.55,0.75,0.20
+38,Out Of Love,Lil Tecca; Internet Money,rap|hip-hop|rnb,sad,0.62,120,0.40,0.78,0.18
+39,Don't Speak,Culture Wars,alt rock|rock|indie rock,emotional,0.72,110,0.50,0.68,0.25
+40,Love Me Again,V,pop|r&b|soul,smooth,0.58,95,0.65,0.70,0.30
+41,Island In The Sun,Weezer,alt rock|rock|indie,happy,0.65,117,0.85,0.72,0.25
+42,Here Without You,3 Doors Down,rock|alt rock|soft rock,sad,0.55,144,0.40,0.55,0.35
+43,POP DAT THANG,DaBaby,rap|hip-hop|trap,party,0.88,145,0.70,0.85,0.06
+44,夜に駆ける,YOASOBI,j-pop|pop|japanese,emotional,0.78,130,0.55,0.80,0.20
+45,I'll Do It Sped Up,Heidi Montag,pop|electronic|edm,energetic,0.90,160,0.75,0.88,0.05
+46,Love Potions Slowed,BJ Lips; princess paparazzi,lofi|hip-hop|rnb,chill,0.40,70,0.60,0.65,0.75
+47,一路生花,温奕心,mandopop|pop|mandarin,inspiring,0.55,90,0.70,0.60,0.40
+48,半點心,Grasshopper,cantopop|pop|cantonese,nostalgic,0.58,105,0.65,0.62,0.35
+49,青花瓷,Jay Chou,mandopop|folk|mandarin,calm,0.50,80,0.60,0.55,0.60
+50,Shadow Stabbing,CAKE,alt rock|indie|rock,quirky,0.65,100,0.55,0.70,0.30
+51,Wheels,CAKE,alt rock|indie|soft rock,chill,0.60,95,0.60,0.68,0.35
+52,summertime,cinnamons; evening cinema,j-pop|lofi|japanese,chill,0.45,75,0.75,0.65,0.70
+53,Fly-day Chinatown,Yasuha,city pop|j-pop|japanese,groovy,0.70,110,0.85,0.80,0.30
+54,Stay With Me,1nonly,rap|hip-hop|rnb,moody,0.68,120,0.50,0.78,0.20
+55,Stateside,PinkPantheress; Zara Larsson,pop|rnb|indie pop,chill,0.62,110,0.75,0.80,0.25
+56,Just Dance,Lady Gaga; Colby O'Donis,pop|electronic|edm,dance,0.90,119,0.90,0.92,0.05
+57,The One That Got Away,Katy Perry,pop|indie pop|soft rock,sad,0.70,134,0.50,0.70,0.20
+58,Si No Le Contesto,Plan B,reggaeton|latin pop|spanish,romantic,0.78,95,0.85,0.88,0.10
+59,Bad Romance,Lady Gaga,pop|electronic|edm,dark,0.88,119,0.65,0.90,0.05
+60,Royals,Lorde,pop|indie pop|alt pop,minimal,0.50,85,0.45,0.65,0.40
+61,Like That,Doja Cat; Gucci Mane,rap|hip-hop|pop rap,confident,0.80,107,0.75,0.85,0.12
+62,Born To Die,Lana Del Rey,alt pop|indie pop|pop,melancholic,0.55,90,0.40,0.60,0.45
+63,Tropical,SL,uk drill|hip-hop|rap,dark,0.70,140,0.35,0.78,0.10
+64,Undercover Martyn,Two Door Cinema Club,indie rock|rock|indie,energetic,0.85,160,0.75,0.78,0.15
+65,Rich In Love,SUPER-Hi; ILIRA,pop|electronic|indie pop,happy,0.78,118,0.88,0.85,0.12
+66,Following the Sun,SUPER-Hi; NEEKA,pop|electronic|indie pop,bright,0.80,120,0.90,0.86,0.10
+67,Snow on The Bluff,Evening Elephants,indie|folk|soft rock,chill,0.40,70,0.60,0.60,0.80
+68,ブルーバード,Ikimonogakari,j-pop|rock|japanese,energetic,0.85,152,0.88,0.82,0.15
+69,怪物,YOASOBI,j-pop|rock|japanese,intense,0.90,170,0.60,0.78,0.10
+70,光るなら,Goose house,j-pop|pop|japanese,uplifting,0.82,165,0.85,0.80,0.20
+71,3 Nights,Dominic Fike,alt pop|indie|pop,chill,0.65,120,0.80,0.78,0.25
+72,Why,Dominic Fike,alt pop|indie|folk,reflective,0.60,110,0.60,0.72,0.30
+73,How Much Is Weed?,Dominic Fike,alt pop|indie|pop rap,playful,0.62,115,0.70,0.75,0.28
+74,Thinkin' Bout Me,Morgan Wallen,country|soft rock|folk,moody,0.58,100,0.55,0.65,0.40
+75,Colgando en tus manos,Carlos Baute; Marta Sánchez,latin pop|pop|spanish,romantic,0.65,90,0.85,0.75,0.35
+76,Pareja Del Año,Sebastian Yatra; Myke Towers,latin pop|reggaeton|spanish,happy,0.78,100,0.90,0.88,0.20
+77,Rosas,La Oreja de Van Gogh,spanish pop|pop|spanish,nostalgic,0.70,130,0.75,0.72,0.30
+78,是你,梦然,mandopop|pop|mandarin,emotional,0.55,95,0.65,0.60,0.45
+79,踏山河,Silk Ye,mandarin folk|folk|mandarin,epic,0.80,140,0.70,0.68,0.25
+80,El Sol No Regresa,La Quinta Estacion,latin pop|pop|spanish,sad,0.72,130,0.60,0.75,0.20
+81,El Presente,Julieta Venegas,latin pop|pop|spanish,bittersweet,0.65,100,0.70,0.72,0.35
+82,Skyfall,Adele,pop|soul|r&b,dramatic,0.75,76,0.40,0.55,0.50
+83,Dani California,Red Hot Chili Peppers,rock|alt rock|indie rock,energetic,0.88,96,0.70,0.70,0.15
+84,SUBEME LA RADIO,Enrique Iglesias; Zion & Lennox,reggaeton|latin pop|spanish,party,0.85,91,0.92,0.90,0.08
+85,月亮代表我的心,Teresa Teng,mandopop|pop|mandarin,romantic,0.35,70,0.85,0.50,0.85
+86,甜蜜蜜,Teresa Teng,mandopop|pop|mandarin,sweet,0.45,95,0.90,0.65,0.70
+87,Cauldron of Thorns,Twin Tribes,darkwave|electronic|indie,dark,0.70,120,0.30,0.65,0.20
+88,Fire Burns Inside Me,Andrea Vanzo,neo-classical|ambient|folk,emotional,0.40,75,0.55,0.40,0.90
+89,Have You Ever Seen The Rain,Creedence Clearwater Revival,rock|folk|soft rock,nostalgic,0.60,117,0.75,0.65,0.35
+90,Sex on Fire,Kings of Leon,alt rock|rock|indie rock,intense,0.85,153,0.65,0.60,0.10
+91,Talk Tough,Dustystaytrue,indie|alt pop|soft rock,moody,0.55,110,0.50,0.70,0.30
+92,Whiskey Glasses,Morgan Wallen,country|soft rock|folk,melancholic,0.65,99,0.60,0.75,0.35
+93,Babydoll,Dominic Fike,alt pop|indie|pop,chill,0.60,110,0.75,0.80,0.25
+94,DON'T KILL THE PARTY,Ty Dolla $ign; Disco Lines,edm|electronic|house,party,0.90,128,0.85,0.88,0.05
+95,All The Things She Said,t.A.T.u.,pop|electronic|indie pop,emotional,0.80,105,0.55,0.75,0.10
+96,归去来兮,花粥,folk|mandopop|mandarin,calm,0.45,85,0.60,0.55,0.70
+97,童話,Michael Wong,mandopop|pop|mandarin,sad,0.50,78,0.65,0.55,0.75
+98,不问别离,指尖笑,mandopop|pop|mandarin,emotional,0.55,95,0.60,0.60,0.60
+99,少年,梦然,mandopop|pop|mandarin,inspiring,0.65,100,0.75,0.70,0.40
+100,别错过 DJ版,程jiajia; DJ阿卓,edm|electronic|mandarin,energetic,0.85,140,0.80,0.88,0.10
+101,出山,花粥; 王胜男,folk|mandopop|mandarin,quirky,0.70,125,0.65,0.75,0.30
+102,Dile al Amor,Aventura,bachata|latin pop|spanish,romantic,0.70,130,0.85,0.85,0.20
+103,La Muralla Verde,Los Enanitos Verdes,rock|latin pop|spanish,energetic,0.80,150,0.75,0.70,0.15
+104,Carita de Inocente,Prince Royce,bachata|latin pop|spanish,romantic,0.75,128,0.90,0.88,0.15
+105,Salty Kiss,Paranapanema,indie|indie pop|folk,chill,0.50,90,0.65,0.70,0.50
+106,芒种,音阙诗听; 赵方婧,mandopop|pop|mandarin,dramatic,0.75,130,0.60,0.75,0.25
+107,千千闋歌,Priscilla Chan,cantopop|pop|cantonese,nostalgic,0.60,110,0.70,0.65,0.40
+108,Pop Out,Polo G; Lil Tjay,rap|hip-hop|trap,aggressive,0.90,160,0.55,0.80,0.10
+109,昨夜风今宵月,庄淇文29,mandopop|pop|mandarin,calm,0.50,85,0.65,0.60,0.55
+110,When I'm Gone,3 Doors Down,rock|alt rock|soft rock,sad,0.65,120,0.45,0.60,0.30
+111,Don't Look Back in Anger,Oasis,rock|indie rock|folk,uplifting,0.75,163,0.85,0.70,0.25
+112,Wicked Game,Chris Isaak,rock|soft rock|indie,melancholic,0.40,113,0.30,0.55,0.60
+113,Don't Dream It's Over,Crowded House,rock|soft rock|indie pop,calm,0.55,85,0.75,0.65,0.40
+114,Moon Rocks,flipturn,indie rock|indie|rock,chill,0.65,120,0.70,0.75,0.30
+115,I Thought I Saw Your Face Today,She & Him,indie|folk|soft rock,soft,0.40,75,0.80,0.55,0.75
+116,Everybody Here Wants You,Jeff Buckley,soul|r&b|jazz,romantic,0.55,90,0.65,0.60,0.55
+117,莫问归期,蒋雪儿,mandopop|pop|mandarin,emotional,0.60,95,0.60,0.60,0.50
+118,燕无歇,蒋雪儿,mandopop|pop|mandarin,dramatic,0.65,120,0.55,0.65,0.45
+119,告白氣球,Jay Chou,mandopop|pop|mandarin,romantic,0.70,100,0.90,0.80,0.35
+120,Come Inside Of My Heart,IV OF SPADES,indie|indie pop|soft rock,romantic,0.60,115,0.85,0.75,0.30
+121,super8,Tiger La Flor,indie|indie rock|indie pop,energetic,0.75,130,0.70,0.78,0.25
+122,breaking news,flowerovlove,alt pop|indie|pop,playful,0.65,120,0.75,0.80,0.20
+123,Seven,Jung Kook; Latto,pop|r&b|indie pop,romantic,0.80,125,0.85,0.88,0.10
+124,Love Talk,WayV,k-pop|pop|korean,seductive,0.75,100,0.80,0.85,0.15
+125,Who,Jimin,k-pop|pop|korean,emotional,0.70,110,0.65,0.75,0.20
+126,Love Talk English,WayV,k-pop|pop|korean,seductive,0.75,100,0.80,0.85,0.15
+127,Magnetic,ILLIT,k-pop|pop|korean,bright,0.78,120,0.88,0.90,0.12
+128,Ok Love You Bye,Olivia Dean,soul|r&b|pop,chill,0.55,95,0.75,0.70,0.40
+129,Es un Secreto,Plan B,reggaeton|latin pop|spanish,romantic,0.80,95,0.90,0.90,0.08
+130,IA,Clarent; Mora,latin trap|reggaeton|spanish,chill,0.70,95,0.75,0.85,0.10
+131,My Life,Billy Joel,rock|soft rock|pop,reflective,0.70,135,0.85,0.75,0.20
+132,Over 85,Hojean,rnb|r&b|soul,chill,0.50,85,0.70,0.75,0.50
+133,Riley,Juicy J,rap|hip-hop|trap,party,0.80,140,0.75,0.85,0.08
+134,I'm Sorry,Aventura,bachata|latin pop|spanish,sad,0.65,120,0.70,0.80,0.25
+135,Wild Blue,John Mayer,soft rock|rock|folk,calm,0.50,80,0.70,0.60,0.60
+136,Vienna,Billy Joel,rock|soft rock|pop,reflective,0.55,75,0.75,0.55,0.65
+137,New Light,John Mayer,pop|soft rock|indie pop,lighthearted,0.70,124,0.85,0.80,0.30
+138,Budapest,George Ezra,folk|indie|soft rock,calm,0.55,128,0.75,0.70,0.50
+139,Sir This Is A Cutthroat Fashion,Her Words Kill,post-hardcore|punk|rock,intense,0.90,160,0.45,0.60,0.05
+140,Take Me Out,Franz Ferdinand,indie rock|rock|indie,energetic,0.88,105,0.70,0.75,0.15
+141,Hier encore,Charles Aznavour,chanson|pop|french,nostalgic,0.50,85,0.60,0.55,0.65
+142,La Foule,Édith Piaf,chanson|pop|french,dramatic,0.70,120,0.65,0.60,0.60
+143,容易受傷的女人,Faye Wong,cantopop|pop|cantonese,emotional,0.55,90,0.60,0.55,0.60
+144,Adventure of a Lifetime,Coldplay,pop|electronic|indie pop,happy,0.85,112,0.90,0.88,0.10
+145,大約在冬季,Chyi Chin,mandopop|pop|mandarin,nostalgic,0.50,85,0.65,0.60,0.55
+146,The Fate of Ophelia,Taylor Swift,alt pop|pop|indie,dramatic,0.65,110,0.55,0.65,0.35
+147,Fame is a Gun,Addison Rae,pop|indie pop|electronic,confident,0.75,120,0.70,0.85,0.15
+148,What the Hell,Avril Lavigne,pop punk|punk|rock,rebellious,0.88,150,0.80,0.82,0.05
+149,she's all i wanna be,Tate McRae,pop|indie pop|alt pop,intense,0.80,150,0.60,0.75,0.10
+150,So Easy To Fall In Love,Olivia Dean,soul|r&b|pop,romantic,0.55,95,0.80,0.70,0.45
+151,can't slow down,almost monday,alt pop|pop|indie,bright,0.78,120,0.88,0.85,0.15
+152,So Cold,Balu Brigada,alt pop|indie|folk,moody,0.60,110,0.45,0.70,0.30
+153,The Door,Teddy Swims,soul|r&b|pop,emotional,0.65,95,0.55,0.65,0.45
+154,telepatía,Kali Uchis,rnb|r&b|pop,chill,0.55,83,0.80,0.85,0.30
+155,JAPAN,Famous Dex,rap|hip-hop|trap,laid-back,0.70,140,0.65,0.82,0.10
+156,Mystery Lady,Masego; Don Toliver,rnb|r&b|soul,smooth,0.68,100,0.75,0.80,0.25
+157,She Had Me At Heads Carolina,Cole Swindell,country|folk|pop,upbeat,0.78,140,0.85,0.80,0.20
+158,Everywhere,Fleetwood Mac,pop|soft rock|rock,happy,0.80,115,0.95,0.85,0.20
+159,Cologne,beabadoobee,indie|indie pop|folk,chill,0.50,90,0.70,0.70,0.50
+160,Take A Bite,beabadoobee,indie|indie pop|pop,playful,0.65,110,0.75,0.75,0.35
+161,Amoeba,Clairo,indie|folk|alt pop,reflective,0.55,95,0.65,0.70,0.55
+162,Livin' The Dream,Morgan Wallen,country|folk|soft rock,laid-back,0.60,100,0.70,0.75,0.40
+163,Broadway Girls,Lil Durk; Morgan Wallen,rap|hip-hop|country,melancholic,0.70,145,0.55,0.78,0.20
+164,Still With You,Jung Kook,k-pop|pop|korean,emotional,0.50,80,0.60,0.65,0.60
+165,Ahora Te Puedes Marchar,Luis Miguel,latin pop|pop|spanish,energetic,0.85,128,0.90,0.88,0.15
+166,Love Somebody,Morgan Wallen,country|soft rock|folk,romantic,0.60,105,0.75,0.70,0.45
+167,El Amante,Nicky Jam,reggaeton|latin pop|spanish,romantic,0.78,95,0.85,0.88,0.12
+168,It Never Rains in Southern California,Albert Hammond,soft rock|rock|folk,nostalgic,0.55,100,0.70,0.65,0.45
+169,Hard Times,Paramore,alt rock|rock|pop punk,energetic,0.85,119,0.80,0.82,0.15
+170,we never dated,sombr,indie|folk|alt pop,sad,0.45,85,0.50,0.65,0.60
+171,Someone New,Hozier,indie|folk|rock,groovy,0.70,120,0.75,0.75,0.25
+172,No One Noticed,The Marías,indie|indie pop|folk,chill,0.50,90,0.60,0.70,0.55
+173,back to friends,sombr,indie|folk|alt pop,melancholic,0.50,90,0.55,0.68,0.55
+174,MAMIII,Becky G; KAROL G,latin pop|reggaeton|spanish,confident,0.85,95,0.88,0.90,0.08
+175,Cuando Me Enamoro,Enrique Iglesias; Juan Luis Guerra,latin pop|pop|spanish,romantic,0.70,100,0.90,0.85,0.25
+176,Rx,Your Neighbors,alt rock|indie|rock,dark,0.65,120,0.50,0.70,0.30
+177,Scrawny,Wallows,indie|indie rock|pop,playful,0.75,120,0.80,0.82,0.20
+178,Bags,Clairo,indie|folk|alt pop,emotional,0.55,100,0.60,0.70,0.55
+179,Terrapin,Clairo,indie|folk|alt pop,chill,0.50,90,0.65,0.68,0.60
+180,Right Down the Line,Gerry Rafferty,soft rock|rock|folk,nostalgic,0.60,100,0.85,0.75,0.40
+181,Drinkin' Problem,Midland,country|soft rock|folk,moody,0.65,98,0.55,0.70,0.35
+182,I Had Some Help,Post Malone; Morgan Wallen,pop|country|soft rock,catchy,0.80,128,0.85,0.88,0.20
+183,Wagon Wheel,Darius Rucker,country|folk|rock,feel-good,0.70,76,0.90,0.75,0.50
+184,Tek It,Cafuné,indie|alt pop|electronic,moody,0.60,95,0.55,0.70,0.40
+185,Honeypie,JAWNY,indie|indie pop|pop,playful,0.65,110,0.80,0.80,0.30
+186,undressed,sombr,indie|folk|alt pop,sad,0.45,80,0.50,0.65,0.65
+187,What Do We Ever Really Know?,Balu Brigada,alt pop|indie|folk,reflective,0.60,110,0.55,0.70,0.35
+188,About You,The 1975,alt pop|indie|indie pop,nostalgic,0.55,95,0.50,0.65,0.50
+189,El Perdón,Nicky Jam; Enrique Iglesias,reggaeton|latin pop|spanish,romantic,0.80,96,0.88,0.90,0.08
+190,Taboo,Don Omar,reggaeton|latin pop|spanish,party,0.88,130,0.90,0.92,0.05
+191,Bailando,Enrique Iglesias; Gente De Zona,latin pop|reggaeton|spanish,party,0.90,91,0.95,0.92,0.05
+192,Notion,The Rare Occasions,indie rock|rock|indie,energetic,0.85,158,0.70,0.78,0.15
+193,Pay the Man,Foster The People,alt pop|indie pop|pop,groovy,0.75,120,0.75,0.80,0.20
+194,Báilame Remix,Nacho; Bad Bunny,reggaeton|latin pop|spanish,party,0.88,100,0.92,0.90,0.06
+195,Are You Bored Yet?,Wallows; Clairo,indie|indie pop|folk,chill,0.65,120,0.75,0.80,0.25
+196,Amanece,Anuel AA; Haze,latin trap|reggaeton|spanish,moody,0.70,90,0.55,0.80,0.10
+197,Una Lady Como Tú,Manuel Turizo,latin pop|reggaeton|spanish,romantic,0.75,95,0.90,0.88,0.10
+198,Love Me Not,Ravyn Lenae,rnb|r&b|soul,smooth,0.60,100,0.70,0.75,0.30
+199,Courtside,Tim Atlas,indie|indie pop|r&b,chill,0.55,90,0.70,0.72,0.45
+200,Is It True,Tame Impala,psychedelic|indie|electronic,groovy,0.75,120,0.70,0.80,0.20
+201,OK,Wallows,indie|indie pop|alt pop,playful,0.70,110,0.80,0.82,0.25
+202,blind,ROLE MODEL,indie|alt pop|folk,sad,0.50,95,0.55,0.68,0.50
+203,Despeinada,Ozuna; Camilo,latin pop|reggaeton|spanish,romantic,0.80,95,0.90,0.90,0.08
+204,Tu jardín con enanitos,Melendi,spanish pop|pop|spanish,romantic,0.70,100,0.85,0.80,0.25
+205,Frances Limon,Los Enanitos Verdes,rock|latin pop|spanish,energetic,0.75,140,0.75,0.72,0.20
+206,Candy,Plan B,reggaeton|latin pop|spanish,romantic,0.85,95,0.92,0.92,0.06
+207,Here I Come,Dennis Brown,reggae|r&b|soul,positive,0.70,90,0.85,0.80,0.30
+208,La Bachata,Manuel Turizo,bachata|latin pop|spanish,romantic,0.78,95,0.88,0.90,0.10
+209,Best Friend,Foster The People,alt pop|indie pop|pop,upbeat,0.85,124,0.90,0.88,0.12
+210,Imagination,Foster The People,alt pop|indie pop|pop,groovy,0.75,120,0.80,0.82,0.20

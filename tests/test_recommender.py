@@ -20,7 +20,7 @@ from src.recommender import (
 
 def _pop_happy_song(**overrides):
     defaults = dict(
-        id=1, title="Pop Happy", artist="A", genre="pop", mood="happy",
+        id=1, title="Pop Happy", artist="A", genre=["pop"], mood="happy",
         energy=0.8, tempo_bpm=120, valence=0.85, danceability=0.8, acousticness=0.2,
     )
     defaults.update(overrides)
@@ -29,7 +29,7 @@ def _pop_happy_song(**overrides):
 
 def _lofi_chill_song(**overrides):
     defaults = dict(
-        id=2, title="Lofi Chill", artist="B", genre="lofi", mood="chill",
+        id=2, title="Lofi Chill", artist="B", genre=["lofi"], mood="chill",
         energy=0.4, tempo_bpm=80, valence=0.6, danceability=0.5, acousticness=0.9,
     )
     defaults.update(overrides)
@@ -38,7 +38,7 @@ def _lofi_chill_song(**overrides):
 
 def _rock_intense_song(**overrides):
     defaults = dict(
-        id=3, title="Rock Intense", artist="C", genre="rock", mood="intense",
+        id=3, title="Rock Intense", artist="C", genre=["rock"], mood="intense",
         energy=0.91, tempo_bpm=152, valence=0.48, danceability=0.66, acousticness=0.1,
     )
     defaults.update(overrides)
@@ -167,10 +167,10 @@ class TestTierWeighting:
     def test_two_songs_same_tier2_tier3_differ_on_genre(self):
         """Between two otherwise identical songs, genre match should win."""
         base = dict(
-            id=1, title="A", artist="X", genre="pop", mood="happy",
+            id=1, title="A", artist="X", genre=["pop"], mood="happy",
             energy=0.5, tempo_bpm=100, valence=0.7, danceability=0.6, acousticness=0.5,
         )
-        alt = dict(base, id=2, title="B", genre="rock")
+        alt = dict(base, id=2, title="B", genre=["rock"])
 
         prefs = {
             "genre": "pop", "mood": "happy", "energy": 0.5,
@@ -178,6 +178,32 @@ class TestTierWeighting:
         }
 
         assert score_song(prefs, base) > score_song(prefs, alt)
+
+
+# ---------------------------------------------------------------------------
+# Tests: multi-genre queries
+# ---------------------------------------------------------------------------
+
+class TestMultiGenreScoring:
+
+    def test_song_matches_if_any_requested_genre_is_in_tags(self):
+        """A song tagged ['bachata', 'latin pop', 'spanish'] should match ["reggaeton", "bachata"]."""
+        song = {"genre": ["bachata", "latin pop", "spanish"], "mood": "romantic",
+                "energy": 0.7, "tempo_bpm": 120, "valence": 0.85, "danceability": 0.85, "acousticness": 0.2}
+        prefs = {"genre": ["reggaeton", "bachata"]}
+        assert score_song(prefs, song) == pytest.approx(1.0)
+
+    def test_song_scores_zero_if_no_requested_genre_in_tags(self):
+        """A pop song should not match a ["reggaeton", "bachata"] query."""
+        song = {"genre": ["pop", "indie pop", "electronic"], "mood": "happy",
+                "energy": 0.82, "tempo_bpm": 118, "valence": 0.84, "danceability": 0.79, "acousticness": 0.18}
+        prefs = {"genre": ["reggaeton", "bachata"]}
+        assert score_song(prefs, song) == pytest.approx(0.0)
+
+    def test_multi_genre_list_with_single_entry_still_works(self):
+        """A single-item list behaves the same as a plain string genre."""
+        song = _song_to_dict(_pop_happy_song())
+        assert score_song({"genre": ["pop"]}, song) == score_song({"genre": "pop"}, song)
 
 
 # ---------------------------------------------------------------------------
@@ -285,7 +311,7 @@ class TestRecommender:
         results = rec.recommend(user, k=2)
 
         assert len(results) == 2
-        assert results[0].genre == "pop"
+        assert "pop" in results[0].genre
         assert results[0].mood == "happy"
 
     def test_recommend_respects_k(self):
@@ -332,8 +358,8 @@ class TestRecommender:
         pop_results = rec.recommend(pop_user, k=1)
         lofi_results = rec.recommend(lofi_user, k=1)
 
-        assert pop_results[0].genre == "pop"
-        assert lofi_results[0].genre == "lofi"
+        assert "pop" in pop_results[0].genre
+        assert "lofi" in lofi_results[0].genre
 
     def test_recommend_single_song_catalog(self):
         """A catalog with one song should always return that song."""
@@ -398,7 +424,7 @@ class TestLoadSongs:
 
     def test_loads_correct_number_of_songs(self):
         songs = load_songs("data/songs.csv")
-        assert len(songs) == 18
+        assert len(songs) == 210
 
     def test_song_dict_has_expected_keys(self):
         songs = load_songs("data/songs.csv")
@@ -426,7 +452,7 @@ class TestLoadSongs:
     def test_first_song_is_sunrise_city(self):
         songs = load_songs("data/songs.csv")
         assert songs[0]["title"] == "Sunrise City"
-        assert songs[0]["genre"] == "pop"
+        assert "pop" in songs[0]["genre"]
 
 
 # ---------------------------------------------------------------------------
@@ -467,8 +493,7 @@ class TestRecommendSongsFunctional:
         songs = load_songs("data/songs.csv")
         prefs = {"genre": "lofi", "mood": "chill", "energy": 0.4}
         results = recommend_songs(prefs, songs, k=3)
-        top_genres = [s["genre"] for s, _, _ in results]
-        assert "lofi" in top_genres
+        assert any("lofi" in s["genre"] for s, _, _ in results)
 
     def test_k_zero_returns_empty(self):
         songs = load_songs("data/songs.csv")

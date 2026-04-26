@@ -13,3 +13,6 @@ venv/
 
 # Pytest cache
 .pytest_cache/
+
+# Runtime logs (keep the logs/ dir via .gitkeep, ignore the log file)
+logs/*.log

@@ -1,3 +1,5 @@
 pandas
 pytest
 streamlit
+boto3
+botocore[crt]

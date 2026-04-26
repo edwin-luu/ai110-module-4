@@ -31,7 +31,7 @@ class Song:
     id: int
     title: str
     artist: str
-    genre: str
+    genre: List[str]
     mood: str
     energy: float
     tempo_bpm: float
@@ -70,10 +70,24 @@ def _build_explanation(user_prefs: Dict, song: Dict) -> str:
             continue
 
         if feature in CATEGORICAL_FEATURES:
-            if song[feature] == user_val:
-                reasons.append(f"genre match" if feature == "genre" else f"mood match")
+            if feature == "genre":
+                song_genres = song[feature] if isinstance(song[feature], list) else [song[feature]]
+                if isinstance(user_val, list):
+                    matched = [g for g in user_val if g in song_genres]
+                    if matched:
+                        reasons.append(f"genre match ({', '.join(matched)})")
+                    else:
+                        reasons.append(f"genre mismatch (none of {', '.join(user_val)} in tags)")
+                else:
+                    if user_val in song_genres:
+                        reasons.append("genre match")
+                    else:
+                        reasons.append(f"genre mismatch ({user_val} not in tags)")
             else:
-                reasons.append(f"{feature} mismatch ({user_val} vs {song[feature]})")
+                if song[feature] == user_val:
+                    reasons.append("mood match")
+                else:
+                    reasons.append(f"mood mismatch ({user_val} vs {song[feature]})")
         elif feature == "tempo_bpm":
             user_norm = _normalize_tempo(user_val)
             song_norm = _normalize_tempo(song[feature])
@@ -99,6 +113,7 @@ def load_songs(csv_path: str) -> List[Dict]:
         reader = csv.DictReader(f)
         for row in reader:
             row["id"] = int(row["id"])
+            row["genre"] = row["genre"].split("|")
             for field in numeric_fields:
                 row[field] = float(row[field])
             songs.append(row)
@@ -120,7 +135,14 @@ def score_song(user_prefs: Dict, song: Dict) -> float:
         weight = DEFAULT_WEIGHTS[feature]
 
         if feature in CATEGORICAL_FEATURES:
-            similarity = 1.0 if song[feature] == user_val else 0.0
+            if feature == "genre":
+                song_genres = song[feature] if isinstance(song[feature], list) else [song[feature]]
+                if isinstance(user_val, list):
+                    similarity = 1.0 if any(g in song_genres for g in user_val) else 0.0
+                else:
+                    similarity = 1.0 if user_val in song_genres else 0.0
+            else:
+                similarity = 1.0 if song[feature] == user_val else 0.0
         elif feature == "tempo_bpm":
             user_norm = _normalize_tempo(user_val)
             song_norm = _normalize_tempo(song[feature])
