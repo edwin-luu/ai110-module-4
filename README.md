@@ -260,11 +260,14 @@ The tier-weighted scoring already handles the recommendation quality problem wel
 
 ## Video Walkthrough
 
-*[Loom link — to be added before submission]*
+Loom Link: https://www.loom.com/share/7010f453ab2c4b479ec040bdbc60a63a
 
 ---
 
 ## Reflection and Ethics
+
+**What this project taught me about AI and problem-solving:**
+The biggest lesson was that integrating an LLM doesn't just add capability — it shifts where problems show up. The original recommender had silent failures (low scores, unintuitive rankings). The AI version has vocal failures: confident-sounding responses for poor matches, LLM output that needs parsing and sanitization, and edge cases the model "understands" conceptually but handles inconsistently (like proportional genre splits). Engineering around an LLM means designing guardrails, not just features. The retrieval layer also taught me that catalog design matters as much as the algorithm — tagging 210 songs with the right genre structure had more impact on recommendation quality than any code change.
 
 **Could this be misused?**
 The system recommends from a fixed local catalog — it cannot access external music or user data, so the misuse surface is low. The main risk is the LLM generating hallucinated song details (wrong artist, wrong genre description) if the context passed to it is ambiguous. Mitigation: all song metadata in the generation prompt comes directly from the catalog, not from the LLM's training data.
