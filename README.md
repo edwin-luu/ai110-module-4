@@ -164,9 +164,9 @@ python -m src.main      # Original batch runner with hardcoded profiles
 ### Running Tests
 
 ```bash
-pytest                          # All 74 unit tests (no Bedrock calls)
-pytest -m integration           # End-to-end live Bedrock test
-pytest tests/test_llm.py -v     # LLM layer tests only
+pytest                                # All 74 unit tests (no Bedrock calls)
+pytest -m integration                 # End-to-end live Bedrock test
+pytest tests/test_llm.py -v           # LLM layer tests only
 pytest tests/test_recommender.py -v   # Scoring engine tests only
 ```
 
